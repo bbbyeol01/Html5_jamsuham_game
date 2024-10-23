@@ -98,25 +98,53 @@
             }
 
             if(keyPressed[UP]){
-                sy -= 10;
+                sy -= 5;
             }
 
             if(keyPressed[DOWN]){
-                sy += 10;
+                sy += 5;
             }
 
             if(keyPressed[LEFT]){
-                sx -= 10;
+                sx -= 5;
             }
 
             if(keyPressed[RIGHT]){
-                sx += 10;
+                sx += 5;
             }
 
             // 장애물 이동
-            
+            moveObstacle();
+
 
             drawAll();
+        }
+
+        function moveObstacle(){
+            for(let i = 0; i < 60; i++){
+
+                let mx = enemy[i].vx * 1 / 100;
+                let my = enemy[i].vy * 1 / 100;
+
+                enemy[i].x += mx;
+                enemy[i].y += my;
+
+                if(enemy[i].x > canvas.width){
+                    enemy[i].x = 0
+                }
+
+                if(enemy[i].x < 0){
+                    enemy[i].x = canvas.width
+                }
+
+                if(enemy[i].y > canvas.height){
+                    enemy[i].y = 0
+                }
+
+                if(enemy[i].y < 0){
+                    enemy[i].y = canvas.height;
+                }
+            }
         }
 
         function drawAll(){
@@ -132,6 +160,20 @@
             // 캐릭터 출력
             bufferCtx.drawImage(submarine, sx, sy);
             ctx.drawImage(canvasBuffer, 0, 0);
+
+            // 장애물 출력
+            drawObstacle();
+            }
+        }
+
+        function drawObstacle(){
+            for(let i = 0; i < 60; i++){
+                ctx.beginPath();
+                ctx.arc(enemy[i].x, enemy[i].y, 5, 0, Math.PI * 2);
+                ctx.fillStyle = enemy[i].color;
+                ctx.fill();
+                ctx.closePath();
+
             }
         }
 
@@ -162,7 +204,7 @@
                     // vector(방향)
                     vx : Math.random() * 200 - 100,
                     vy : Math.random() * 200 - 100,
-                    color : enemyColor[Math.floor(Math.random() * 3)],
+                    color : enemyColor[Math.floor(Math.random() * enemyColor.length)],
                 })
             }
         }
